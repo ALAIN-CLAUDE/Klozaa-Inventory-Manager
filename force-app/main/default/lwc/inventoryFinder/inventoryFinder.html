@@ -1,0 +1,88 @@
+<template>
+    <lightning-card title="Find or Update Inventory(Recherche ou Mise à Jour d'Inventaire)" icon-name="standard:search">
+        <div class="slds-p-around_medium">
+
+            <!-- Warehouse Selection -->
+            <lightning-combobox
+                label="Select Warehouse(Choisir l'Entrepôt)"
+                value={selectedWarehouse}
+                options={warehouseOptions}
+                onchange={handleWarehouseChange}>
+            </lightning-combobox>
+
+            <!-- Barcode Input -->
+            <lightning-input
+                label="Scan / Enter SKU Barcode(Scanner / Entrer le Code-barres SKU)"
+                value={scannedBarcode}
+                onchange={handleBarcodeChange}
+                class="barcode-input"
+                autofocus>
+            </lightning-input>
+
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </template>
+
+            <!-- Search Button -->
+            <lightning-button
+                label="Search Inventory(Recherche de Stock)"
+                onclick={SearchInventory}
+                variant="brand"
+                class="slds-m-top_small">
+            </lightning-button>
+
+            <!-- Error Feedback -->
+            <template if:true={noResult}>
+                <p class="slds-text-color_error slds-m-top_small">
+                    No product with this SKU. Please ensure it exists in the Product catalog
+                    or that an Inventory record has been created.
+                </p>
+            </template>
+
+            <!-- Inventory Data Table -->
+            <template if:true={hasItems}>
+                <div class="slds-m-top_medium">
+                    <h3 class="slds-text-heading_small">If you wish to update Stock quantity, Please the select product below ("Si vous souhaitez mettre à jour la quantité de stock, sélectionnez le produit)</h3>
+
+                    <lightning-datatable
+                        key-field="id"
+                        data={orderItems}
+                        columns={columns}
+                        onsave={handleSave}
+                        draft-values={draftValues}
+                        onrowselection={handleRowSelection}
+                        max-row-selection="1">
+                    </lightning-datatable>
+                </div>
+           
+
+            <!-- Update Stock Section -->
+            <template if:true={selectedInventoryId}>
+                <div class="slds-m-top_large slds-box slds-theme_default">
+                    <h3 class="slds-text-heading_small">
+                         Do you want to update current stock? / Voulez-vous mettre à jour le stock actuel ?
+                    </h3>
+
+                    <lightning-input type="number"
+                                     label="Nouveau stock actuel"
+                                     value={newCurrentStock}
+                                     onchange={handleNewStockChange}
+                                     min="0">
+                    </lightning-input>
+
+                    <lightning-button label="Mettre à jour le stock"
+                                      variant="success"
+                                      onclick={updateCurrentStock}
+                                      class="slds-m-top_small">
+                    </lightning-button>
+
+                    <template if:true={isUpdating}>
+                        <lightning-spinner alternative-text="Updating…" size="small"></lightning-spinner>
+                    </template>
+                </div>
+            </template>
+             </template>
+        </div>
+    </lightning-card>
+</template>

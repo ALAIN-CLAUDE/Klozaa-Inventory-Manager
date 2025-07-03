@@ -1,0 +1,49 @@
+<template>
+    <lightning-card title="Inventory Scanner" icon-name="custom:custom19">
+        <div class="slds-p-around_medium">
+            <!-- Warehouse Selection -->
+            <lightning-combobox
+                label="Select Warehouse"
+                value={selectedWarehouse}
+                options={warehouseOptions}
+                onchange={handleWarehouseChange}>
+            </lightning-combobox>
+
+            <!-- Barcode Input -->
+            <lightning-input 
+                label="Scan Barcode" 
+                value={scannedBarcode} 
+                onchange={handleBarcodeChange}
+                class="barcode-input"
+                autofocus>
+            </lightning-input>
+            
+            <!-- Action Buttons -->
+            <lightning-button 
+                label="Add to Current Order" 
+                onclick={addToOrder}
+                variant="brand"
+                class="slds-m-top_small">
+            </lightning-button>
+            
+            <lightning-button 
+                label="Submit Order" 
+                onclick={submitOrder}
+                variant="brand"
+                class="slds-m-top_small slds-m-left_small">
+            </lightning-button>
+            
+            <!-- Order Items Table -->
+            <div class="slds-m-top_medium">
+                <h3 class="slds-text-heading_small">Current Order Items</h3>
+                <lightning-datatable
+                    key-field="id"
+                    data={orderItems}
+                    columns={columns}
+                    onsave={handleSave}
+                    draft-values={draftValues}>
+                </lightning-datatable>
+            </div>
+        </div>
+    </lightning-card>
+</template>

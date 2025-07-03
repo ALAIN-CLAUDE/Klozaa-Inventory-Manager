@@ -1,0 +1,11 @@
+<template>
+    <lightning-card title="Scan Product">
+        <lightning-input label="Barcode" value={barcode} onchange={handleBarcodeChange}></lightning-input>
+        <lightning-input type="number" label="Quantity" value={quantity} onchange={handleQtyChange}></lightning-input>
+        <lightning-combobox label="Movement Type" value={type} options={typeOptions} onchange={handleTypeChange}></lightning-combobox>
+        <lightning-button label="Submit" onclick={handleSubmit}></lightning-button>
+        <template if:true={productName}>
+            <p>Product: {productName}</p>
+        </template>
+    </lightning-card>
+</template>
