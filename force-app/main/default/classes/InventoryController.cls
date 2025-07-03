@@ -17,7 +17,7 @@ public with sharing class InventoryController {
             ];
 
             if (product == null) {
-                throw new AuraHandledException('Product not found');
+                throw new AuraHandledException('Product(s) not found');
             }
 
             List<Inventory__c> inventoryList = [
