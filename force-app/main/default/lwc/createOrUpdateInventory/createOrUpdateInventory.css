@@ -1,0 +1,11 @@
+        .banner-container {
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        .banner-img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
