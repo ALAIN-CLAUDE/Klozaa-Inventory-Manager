@@ -1,0 +1,110 @@
+<template>
+    <div class="slds-card slds-p-around_medium">
+        <!-- HEADER -->
+        <div class="slds-text-align_center slds-m-bottom_medium">
+            <h1 class="slds-text-heading_large slds-text-color_success">
+                🛒 Place Order (Quote)
+            </h1>
+            <p class="slds-text-body_regular slds-m-top_x-small">
+                Search customers, add products, and place an order.
+            </p>
+        </div>
+
+        <!-- 🔍 ACCOUNT SEARCH -->
+        <div class="slds-m-bottom_medium">
+            <h2 class="slds-text-heading_small slds-m-bottom_x-small">
+                1️⃣ Select Customer
+            </h2>
+
+            <lightning-input type="search"
+                             label="Search Customer Account"
+                             value={acctKeyword}
+                             onchange={handleAcctKeyword}
+                             placeholder="Type account name">
+            </lightning-input>
+
+            <!-- Account result suggestions -->
+            <template if:true={acctResults}>
+                <ul class="slds-box slds-box_x-small slds-theme_shade slds-m-top_x-small slds-scrollable_y" style="max-height: 150px;">
+                    <template for:each={acctResults} for:item="acct">
+                        <li key={acct.Id}
+                            class="slds-p-vertical_x-small slds-p-horizontal_small slds-border_bottom slds-text-link"
+                            onclick={handleAcctPick}
+                            data-id={acct.Id}
+                            data-name={acct.Name}
+                            style="cursor: pointer;">
+                            {acct.Name}
+                        </li>
+                    </template>
+                </ul>
+            </template>
+
+            <!-- No match -->
+            <template if:true={noAcctFound}>
+                <p class="slds-text-color_error slds-m-top_x-small">
+                    ⚠️ No matching Merchant accounts found for that Name
+                </p>
+            </template>
+
+            <!-- Selected summary -->
+            <template if:true={accountId}>
+                <div class="slds-m-top_small slds-box slds-theme_success slds-text-color_inverse">
+                    ✅ Selected Customer: <strong>{selectedAcctName}</strong>
+                </div>
+            </template>
+        </div>
+
+        <!-- 🔎 PRODUCT SEARCH -->
+        <div class="slds-m-bottom_medium">
+            <h2 class="slds-text-heading_small slds-m-bottom_x-small">
+                2️⃣ Search and Add Products
+            </h2>
+
+            <lightning-input type="search"
+                             label="Search Products (Name or SKU)"
+                             value={prodKeyword}
+                             onchange={handleProdKeyword}>
+            </lightning-input>
+
+            <template if:true={prodResults}>
+                <lightning-datatable key-field="Id"
+                                     data={prodResults}
+                                     columns={prodColumns}
+                                     onrowaction={addToCart}
+                                     class="slds-m-top_medium">
+                </lightning-datatable>
+            </template>
+        </div>
+
+        <!-- 🛒 CART -->
+        <template if:true={cart}>
+            <div class="slds-m-bottom_medium">
+                <h2 class="slds-text-heading_small slds-m-bottom_x-small">
+                    3️⃣ Cart Summary
+                </h2>
+
+                <lightning-datatable key-field="productId"
+                                     data={cart}
+                                     columns={cartColumns}
+                                     draft-values={draftValues}
+                                     onsave={saveDrafts}>
+                </lightning-datatable>
+
+                <div class="slds-align_absolute-center slds-m-top_medium">
+                    <lightning-button label="Place Order"
+                                      variant="brand"
+                                      onclick={placeOrder}
+                                      disabled={isPlaceDisabled}>
+                    </lightning-button>
+                </div>
+            </div>
+        </template>
+
+        <!-- ⏳ Spinner -->
+        <template if:true={isBusy}>
+            <div class="slds-align_absolute-center slds-m-top_medium">
+                <lightning-spinner size="medium"></lightning-spinner>
+            </div>
+        </template>
+    </div>
+</template>

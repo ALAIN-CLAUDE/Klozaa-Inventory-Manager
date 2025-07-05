@@ -109,11 +109,21 @@ public static List<Account> getSuppliers() {
 
             /* 4. PricebookEntry in Standard PB */
             Id stdPbId = [SELECT Id FROM Pricebook2 WHERE IsStandard = true LIMIT 1].Id;
+            Id stdPbId2 = [SELECT Id FROM Pricebook2 WHERE name = 'Standard' LIMIT 1].Id;
+
             insert new PricebookEntry(
                 Product2Id   = prod.Id,
                 Pricebook2Id = stdPbId,
                 UnitPrice    = unitPrice,
                 IsActive     = true
+            );
+
+            insert new PricebookEntry(
+                Product2Id   = prod.Id,
+                Pricebook2Id = stdPbId2,
+                UnitPrice    = unitPrice,
+                IsActive     = true,
+                UseStandardPrice = true
             );
 
             /* 5. Inventory record */
